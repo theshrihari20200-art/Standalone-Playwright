@@ -1,0 +1,21 @@
+{
+  "consoleErrors": [],
+  "log": [
+    "events page body fragment:\nEventHub\nHome\nEvents\nMy Bookings\nAPI Docs\nAdmin\nmanish123@gmail.com\nLogout\nUpcoming Events\n\nFind your next unforgettable experience\n\nAll Categories\n🎙 Conference\n🎵 Concert\n⚽ Sports\n🛠 Workshop\n🎉 Festival\nAll Cities\nMumbai\nBangalore\nDelhi\nHyderabad\nChennai\nPune\nYour sandbox holds up to 9 bookings and you can create up to 6 custom events. When either limit is reached, the oldest entry is automatically replaced.\nFestival\nFeatured\nDilli Diwali Mela\nTue, 20 Oct\nPragati Maidan Exhibition Grounds, Delhi\n\n$300\n\n8 seats left!\nBook Now\nConcert\nFeatured\nHollywood Monsoon Night — Los Angeles\nSun, 12 Jul\nDome, NSCI SVP Stadium, Worli, Los Angeles\n\n$2,500\n\n481 seats available\nBook Now\nConference\nFeatured\nWorld Tech Summit\nSat, 18 Apr\nHyderabad, Hitech city, Hyderabad\n\n$1,500\n\n8 seats left!\nBook Now\nFestival\nFull Optional Event\nWed, 15 Dec\nFull Venue Address, Pune, Pune\n\n$250\n\n250 seats available\nBook Now\nConference\nMinimal Event Test\nWed, 1 Dec\nSomewhere, Delhi, Delhi\n\n$0\n\n100 seats available\nBook Now\nConference\nQA Conference 2026\nSun, 15 Aug\nKanteerava Indoor Stadium, Bangalore, Bangalore\n\n$499\n\n500 seats available\nBook Now\nSports\nInspectFinal\nTue, 30 Jun\nY, X\n\n$200\n\n5 seats left!\nBook Now\nSports\nTest Event Debug\nTue, 30 Jun\nTest Venue, Test City\n\n$200\n\n5 seats left!\nBook Now\nSports\nTest Event\nTue, 30 Jun\nTest Venue, Test City\n\n$200\n\n5 seats left!\nBook Now\nAdd New Event\nRahul Shetty Academy\n\nIndia's leading QA automation training academy — empowering engineers to build real-world testing skills.\n\nPopular Courses\nSelenium WebDriver with Java\nPlaywright with JavaScript\nRestAssured API Testing\nCypress End-to-End Testing\nAppium Mobile Testing\nQA Job Hiring Platform\n\nGet hired faster — take skill assessments trusted by top QA employers worldwide.\n\ntechsmarthire.com →\nEventHub Practice App\nBrowse Events\nMy Bookings\nManage Events\nAPI Documentation\n\n© 2026 Rahul Shetty Academy. All rights reserved.\n\nrahulshettyacademy.com →\ntechsmarthire.com →",
+    "\"QA Conference 2026\" on /events count= 1",
+    "admin/events table rows= 9",
+    "row snippets:\n[0] Dilli Diwali MelaFeatured Festival Delhi 20 Oct 2026 $300 8/10000 Read-only\n[1] Hollywood Monsoon Night — Los AngelesFeatured Concert Los Angeles 12 Jul 2026 $2,500 481/3000 Read-only\n[2] World Tech SummitFeatured Conference Hyderabad 18 Apr 2026 $1,500 8/500 Read-only\n[3] Full Optional Event Festival Pune 15 Dec 2027 $250 250/250 Edit Delete\n[4] Minimal Event Test Conference Delhi 1 Dec 2027 $0 100/100 Edit Delete\n[5] QA Conference 2026 Conference Bangalore 15 Aug 2027 $499 500/500 Edit Delete\n[6] InspectFinal Sports X 30 Jun 2026 $200 5/5 Edit Delete\n[7] Test Event Debug Sports Test City 30 Jun 2026 $200 5/5 Edit Delete\n[8] Test Event Sports Test City 30 Jun 2026 $200 5/5 Edit Delete"
+  ],
+  "tableRows": [
+    "[0] Dilli Diwali MelaFeatured Festival Delhi 20 Oct 2026 $300 8/10000 Read-only",
+    "[1] Hollywood Monsoon Night — Los AngelesFeatured Concert Los Angeles 12 Jul 2026 $2,500 481/3000 Read-only",
+    "[2] World Tech SummitFeatured Conference Hyderabad 18 Apr 2026 $1,500 8/500 Read-only",
+    "[3] Full Optional Event Festival Pune 15 Dec 2027 $250 250/250 Edit Delete",
+    "[4] Minimal Event Test Conference Delhi 1 Dec 2027 $0 100/100 Edit Delete",
+    "[5] QA Conference 2026 Conference Bangalore 15 Aug 2027 $499 500/500 Edit Delete",
+    "[6] InspectFinal Sports X 30 Jun 2026 $200 5/5 Edit Delete",
+    "[7] Test Event Debug Sports Test City 30 Jun 2026 $200 5/5 Edit Delete",
+    "[8] Test Event Sports Test City 30 Jun 2026 $200 5/5 Edit Delete"
+  ],
+  "finalUrl": "https://eventhub.rahulshettyacademy.com/admin/events"
+}

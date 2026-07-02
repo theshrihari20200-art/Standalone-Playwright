@@ -1,0 +1,433 @@
+{
+  "metadata": {
+    "targetUrl": "https://eventhub.rahulshettyacademy.com/",
+    "feature": "Register new user, then log in with those credentials",
+    "generatedAt": "2026-06-25T13:30:00Z",
+    "credentialsSource": "N/A — uses freshly generated test users, never reuses seeded creds (the seeded manish123@gmail.com is used only for the duplicate-email and wrong-password negative cases)",
+    "loginConfirmed": true,
+    "agent": "website-manual-tester",
+    "uniqueEmailUsedForTC1": "qa.reg.<unix-ms>@example.com (generated at runtime — see \"testData\" inside TC1)",
+    "sessionStorageLocation": "localStorage['eventhub_token'] (JWT). NO cookies set. Logout wipes localStorage.",
+    "combinedFrom": [
+      "register-login-2026-06-25.json",
+      "_register-login-mqta7igb-raw.json"
+    ],
+    "notes": "Two source files were merged. The primary file is the polished, fully-verified spec. The raw trace is preserved inside `rawRunTrace` for audit. Where the two sources disagreed (e.g. TC5 was marked 'failed' in the raw trace but 'passed' in the polished spec with the wrong-login error text confirmed via body-text scan), the polished spec wins."
+  },
+
+  "registrationEntryPoint": {
+    "location": "login-page-link",
+    "selector": "/login page exposes a 'Create Account' / 'Sign up' link to /register. Direct navigation to https://eventhub.rahulshettyacademy.com/register also works.",
+    "label": "Create Account (button on /register) / Sign up (link on /login)",
+    "notes": "On /register there is also a 'Sign in' link back to /login. There is no public nav-bar link to /register — users reach it from /login or by typing the URL."
+  },
+
+  "logoutEntryPoint": {
+    "location": "header",
+    "selector": "button#logout-btn (data-testid=\"logout-btn\")",
+    "label": "Logout",
+    "notes": "Always visible in the header for authenticated users — no profile menu, no dropdown. Header order observed: EventHub / Home / Events / My Bookings / API Docs / Admin / <email> / Logout."
+  },
+
+  "loginEntryPoint": {
+    "location": "redirect-on-logout + login-page",
+    "selector": "#login-btn (form button[type=\"submit\"]) on /login. Email field #email, password field #password.",
+    "label": "Sign In",
+    "notes": "Visiting any auth-only route while unauthenticated redirects to /login (e.g. /bookings → /login)."
+  },
+
+  "registrationFormFields": [
+    {
+      "name": "email",
+      "label": "Email",
+      "selector": "#register-email",
+      "type": "email",
+      "required": true,
+      "placeholder": "you@email.com",
+      "validationHint": "Empty submit -> inline error 'Enter a valid email'. Bad format (e.g. 'not-an-email') -> same error. Duplicate email -> inline error 'Email already registered'."
+    },
+    {
+      "name": "password",
+      "label": "Password",
+      "selector": "#register-password",
+      "type": "password",
+      "required": true,
+      "placeholder": "Min 8 chars, uppercase, number & symbol",
+      "validationHint": "Empty/weak submit -> inline error 'Password does not meet the requirements below'. Policy enforced: minimum 8 chars, at least one uppercase letter, at least one digit, at least one symbol. Verified accepted: 'Test1234!Aa'."
+    },
+    {
+      "name": "confirmPassword",
+      "label": "Confirm Password",
+      "selector": "form input[type=\"password\"]:not(#register-password)",
+      "type": "password",
+      "required": true,
+      "placeholder": "Repeat your password",
+      "validationHint": "Has NO id attribute. Must match the password field; mismatch yields inline error 'Passwords do not match'. Confirmed by TC3.",
+      "selectorNotes": "Recommend also matching by placeholder if needed: form input[placeholder=\"Repeat your password\"]"
+    }
+  ],
+
+  "loginFormFields": [
+    {
+      "name": "email",
+      "label": "Email",
+      "selector": "#email",
+      "type": "email",
+      "required": true,
+      "placeholder": "you@email.com",
+      "validationHint": "Wrong email OR wrong password yields inline error 'Invalid email or password' (found via body-text scan, not via the [role=alert]/.error-message selectors)."
+    },
+    {
+      "name": "password",
+      "label": "Password",
+      "selector": "#password",
+      "type": "password",
+      "required": true,
+      "placeholder": "••••••",
+      "validationHint": "Field is masked (type=password). Placeholder is rendered as bullets."
+    }
+  ],
+
+  "fieldSelectors": {
+    "registerForm": null,
+    "registerEmail": "#register-email",
+    "registerPassword": "#register-password",
+    "registerConfirmPassword": "form input[type=\"password\"]:not(#register-password)",
+    "registerSubmit": "button#register-btn",
+    "loginEmail": "#email",
+    "loginPassword": "#password",
+    "loginSubmit": "button#login-btn",
+    "logout": "button#logout-btn",
+    "headerEmail": "header [data-testid='user-email'], header :text-matches('.+@.+')"
+  },
+
+  "testCases": [
+    {
+      "id": "TC1",
+      "title": "Happy path — register a fresh user and confirm auto-login",
+      "priority": "high",
+      "type": "happy",
+      "preconditions": [
+        "Fresh browser context (no cookies, no localStorage)",
+        "A unique email is generated per run with a unix-ms suffix to avoid duplicate collisions"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "https://eventhub.rahulshettyacademy.com/register", "selector": null },
+        { "action": "fill", "field": "email", "value": "qa.reg.<unix-ms>@example.com", "selector": "#register-email" },
+        { "action": "fill", "field": "password", "value": "Test1234!Aa", "selector": "#register-password" },
+        { "action": "fill", "field": "confirmPassword", "value": "Test1234!Aa", "selector": "form input[type=\"password\"]:not(#register-password)" },
+        { "action": "submit", "selector": "button#register-btn" },
+        { "action": "expect", "target": "redirect to https://eventhub.rahulshettyacademy.com/ with the registered email and a Logout button visible in the header", "selector": "header" }
+      ],
+      "expectedResult": "User is auto-logged-in and lands on the home page (https://eventhub.rahulshettyacademy.com/). Header contains the new email and a Logout button. A JWT appears in localStorage['eventhub_token'].",
+      "executionStatus": "passed",
+      "executionNotes": "Ran live 2026-06-25. postRegisterUrl=https://eventhub.rahulshettyacademy.com/ ; headerShowsEmail=true ; headerShowsLogout=true ; postRegisterTitle='EventHub — Discover & Book Events'. localStorage.eventhub_token populated with a JWT.",
+      "testData": {
+        "generatedEmailPattern": "qa.reg.<unix-ms>@example.com",
+        "generatedPassword": "Test1234!Aa",
+        "firstName": "NOT COLLECTED BY FORM",
+        "lastName": "NOT COLLECTED BY FORM"
+      },
+      "postConditions": {
+        "postRegisterUrl": "https://eventhub.rahulshettyacademy.com/",
+        "localStorageKeySet": "eventhub_token",
+        "headerEmailVisible": true,
+        "headerLogoutVisible": true
+      }
+    },
+    {
+      "id": "TC2",
+      "title": "Required-field validation — submit empty register form",
+      "priority": "high",
+      "type": "boundary",
+      "preconditions": [
+        "Logged-out state",
+        "On /register"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "https://eventhub.rahulshettyacademy.com/register", "selector": null },
+        { "action": "click submit without filling any fields", "selector": "button#register-btn" }
+      ],
+      "expectedResult": "Form stays on /register. Inline errors visible: 'Enter a valid email' under the email field and 'Password does not meet the requirements below' under the password field. URL does not change.",
+      "executionStatus": "passed",
+      "executionNotes": "Ran live 2026-06-25. beforeUrl=https://eventhub.rahulshettyacademy.com/register ; afterUrl=https://eventhub.rahulshettyacademy.com/register (stayedOnRegister=true). Visible errors: ['Enter a valid email', 'Password does not meet the requirements below']. The confirm-password field shows no error on empty submit because the password field already triggered a 'requirements below' error first.",
+      "testData": {},
+      "observedErrors": [
+        "Enter a valid email",
+        "Password does not meet the requirements below"
+      ]
+    },
+    {
+      "id": "TC3",
+      "title": "Boundary — invalid email, weak password, mismatched confirm, duplicate email",
+      "priority": "medium",
+      "type": "boundary",
+      "preconditions": ["Logged-out state", "On /register"],
+      "steps": [
+        { "action": "fill email with 'not-an-email'", "selector": "#register-email" },
+        { "action": "fill password with 'abc'", "selector": "#register-password" },
+        { "action": "fill confirm with 'xyz'", "selector": "form input[type=\"password\"]:not(#register-password)" },
+        { "action": "submit", "selector": "button#register-btn" },
+        { "action": "expect", "target": "stay on /register with inline errors for email, password policy, and confirm-mismatch", "selector": null },
+        { "action": "then fill email with seeded 'manish123@gmail.com' (already in the system)", "selector": "#register-email" },
+        { "action": "fill password with a policy-compliant value and matching confirm", "selector": "#register-password / form input[type=\"password\"]:not(#register-password)" },
+        { "action": "submit", "selector": "button#register-btn" },
+        { "action": "expect", "target": "stay on /register with 'Email already registered' error", "selector": null }
+      ],
+      "expectedResult": "All four boundary attempts are rejected client-side or server-side with visible inline errors and no navigation away from /register.",
+      "executionStatus": "passed",
+      "executionNotes": "Ran live 2026-06-25. Bad-email+weak+pwd-mismatch submission stayed on /register with errors: ['Enter a valid email', 'Password does not meet the requirements below', 'Passwords do not match']. Duplicate-email submission with the seeded manish123@gmail.com stayed on /register with inline error: 'Email already registered'.",
+      "testData": {
+        "badEmailValue": "not-an-email",
+        "weakPasswordValue": "abc",
+        "mismatchConfirmValue": "xyz",
+        "duplicateEmailValue": "manish123@gmail.com"
+      },
+      "observedErrors": [
+        "Enter a valid email",
+        "Password does not meet the requirements below",
+        "Passwords do not match",
+        "Email already registered"
+      ]
+    },
+    {
+      "id": "TC4",
+      "title": "Logout-then-login round-trip with a freshly registered user",
+      "priority": "high",
+      "type": "navigation",
+      "preconditions": [
+        "Logged-out state",
+        "A freshly registered user (unique email per run)"
+      ],
+      "steps": [
+        { "action": "register a fresh user", "selector": "#register-email / #register-password / form input[type=\"password\"]:not(#register-password)" },
+        { "action": "expect", "target": "auto-redirect to https://eventhub.rahulshettyacademy.com/ with new email in header", "selector": "header" },
+        { "action": "click Logout", "selector": "button#logout-btn" },
+        { "action": "expect", "target": "URL is now https://eventhub.rahulshettyacademy.com/login", "selector": null },
+        { "action": "navigate to /bookings while logged-out", "selector": null },
+        { "action": "expect", "target": "redirect to https://eventhub.rahulshettyacademy.com/login (session is truly gone)", "selector": null },
+        { "action": "log back in with the new credentials", "selector": "#email / #password / button#login-btn" },
+        { "action": "expect", "target": "redirect to https://eventhub.rahulshettyacademy.com/ with new email in header", "selector": "header" }
+      ],
+      "expectedResult": "Full register → home → logout → /login → /bookings redirects to /login → re-login → home round-trip works end-to-end and the session is properly terminated on logout.",
+      "executionStatus": "passed",
+      "executionNotes": "Ran live 2026-06-25. urlAfterRegister=https://eventhub.rahulshettyacademy.com/ ; headerAfterRegister(containsEmail)=true ; urlAfterLogout=https://eventhub.rahulshettyacademy.com/login ; urlAfterBookings=https://eventhub.rahulshettyacademy.com/login ; urlAfterRelogin=https://eventhub.rahulshettyacademy.com/ ; headerAfterRelogin(containsEmail)=true. Note: a 'Admin' nav link is visible in the header for the seeded manish user but is NOT visible for a freshly registered normal user.",
+      "testData": {
+        "generatedEmailPattern": "qa.reg.rt.<unix-ms>@example.com",
+        "generatedPassword": "Test1234!Aa"
+      },
+      "postConditions": {
+        "postRegisterUrl": "https://eventhub.rahulshettyacademy.com/",
+        "postLogoutUrl": "https://eventhub.rahulshettyacademy.com/login",
+        "loggedOutGateRedirectExample": "/bookings -> /login",
+        "postReloginUrl": "https://eventhub.rahulshettyacademy.com/"
+      }
+    },
+    {
+      "id": "TC5",
+      "title": "Negative login (wrong password) + correct login + session/cookie sanity",
+      "priority": "high",
+      "type": "negative",
+      "preconditions": [
+        "Logged-out state",
+        "A registered user exists (seeded manish123@gmail.com / Manish9@@)"
+      ],
+      "steps": [
+        { "action": "navigate to https://eventhub.rahulshettyacademy.com/login", "selector": null },
+        { "action": "fill email = 'manish123@gmail.com'", "selector": "#email" },
+        { "action": "fill password = 'DefinitelyWrong999'", "selector": "#password" },
+        { "action": "submit", "selector": "button#login-btn" },
+        { "action": "expect", "target": "stay on /login with inline error 'Invalid email or password'", "selector": null },
+        { "action": "fill email = 'manish123@gmail.com'", "selector": "#email" },
+        { "action": "fill password = 'Manish9@@'", "selector": "#password" },
+        { "action": "submit", "selector": "button#login-btn" },
+        { "action": "expect", "target": "redirect to https://eventhub.rahulshettyacademy.com/ with email in header", "selector": "header" },
+        { "action": "hard-reload the page", "selector": null },
+        { "action": "expect", "target": "still on https://eventhub.rahulshettyacademy.com/ with email in header (session persisted)", "selector": "header" },
+        { "action": "verify password field is type=password (masked) on /login and /register", "selector": "#password / #register-password / form input[type=\"password\"]:not(#register-password)" }
+      ],
+      "expectedResult": "Wrong password is rejected with a visible error. Correct password logs the user in and the session survives a hard reload. Password fields are masked on both /login and /register.",
+      "executionStatus": "passed",
+      "executionNotes": "Ran live 2026-06-25. wrongLoginUrl=https://eventhub.rahulshettyacademy.com/login ; wrongLoginErrors include 'Invalid email or password' (confirmed via body-text scan, not via [role=alert]/.error-message which did not match). correctLoginUrl=https://eventhub.rahulshettyacademy.com/ ; headerContainsEmail=true. reloadUrl=https://eventhub.rahulshettyacademy.com/ ; reloadHeaderContainsEmail=true. Login password input type='password'. Register inputs: [{id:'register-email',type:'email'},{id:'register-password',type:'password'},{id:'',type:'password'}] — all passwords masked. Session token lives in localStorage['eventhub_token'] (JWT); logout wipes localStorage. No cookies are set on login or cleared on logout.",
+      "testData": {
+        "seededEmail": "manish123@gmail.com",
+        "seededCorrectPassword": "Manish9@@",
+        "wrongPasswordAttempted": "DefinitelyWrong999"
+      },
+      "observedErrors": [
+        "Invalid email or password"
+      ],
+      "sessionFindings": {
+        "storageLocation": "localStorage",
+        "key": "eventhub_token",
+        "valueType": "JWT (3 base64 segments)",
+        "cookies": "none set",
+        "sessionStorage": "empty",
+        "logoutEffect": "localStorage is fully cleared (key disappears)"
+      }
+    }
+  ],
+
+  "autoRedirectBehavior": {
+    "postRegisterUrl": "https://eventhub.rahulshettyacademy.com/",
+    "postLoginUrl": "https://eventhub.rahulshettyacademy.com/",
+    "postLogoutUrl": "https://eventhub.rahulshettyacademy.com/login",
+    "sessionEndedGateRedirectExample": "/bookings -> /login",
+    "sessionEndedGateRedirectIsConsistent": true
+  },
+
+  "executionEvidence": {
+    "tc1_happyRegister": {
+      "postRegisterUrl": "https://eventhub.rahulshettyacademy.com/",
+      "postRegisterTitle": "EventHub — Discover & Book Events",
+      "headerShowsEmail": true,
+      "headerShowsLogout": true,
+      "status": "passed"
+    },
+    "tc2_emptyRegister": {
+      "beforeUrl": "https://eventhub.rahulshettyacademy.com/register",
+      "afterUrl": "https://eventhub.rahulshettyacademy.com/register",
+      "stayedOnRegister": true,
+      "visibleErrors": ["Enter a valid email", "Password does not meet the requirements below"],
+      "status": "passed"
+    },
+    "tc3_badAndDuplicateRegister": {
+      "badSubmitUrl": "https://eventhub.rahulshettyacademy.com/register",
+      "badErrors": ["Enter a valid email", "Password does not meet the requirements below", "Passwords do not match"],
+      "dupSubmitUrl": "https://eventhub.rahulshettyacademy.com/register",
+      "dupErrors": ["Email already registered"],
+      "status": "passed"
+    },
+    "tc4_logoutRelogin": {
+      "urlAfterRegister": "https://eventhub.rahulshettyacademy.com/",
+      "headerAfterRegisterContainsEmail": true,
+      "urlAfterLogout": "https://eventhub.rahulshettyacademy.com/login",
+      "urlAfterBookings": "https://eventhub.rahulshettyacademy.com/login",
+      "urlAfterRelogin": "https://eventhub.rahulshettyacademy.com/",
+      "headerAfterReloginContainsEmail": true,
+      "status": "passed"
+    },
+    "tc5_negativeLogin": {
+      "wrongLoginUrl": "https://eventhub.rahulshettyacademy.com/login",
+      "wrongLoginErrorText": "Invalid email or password (confirmed via body-text scan)",
+      "correctLoginUrl": "https://eventhub.rahulshettyacademy.com/",
+      "headerContainsEmail": true,
+      "reloadUrl": "https://eventhub.rahulshettyacademy.com/",
+      "reloadHeaderContainsEmail": true,
+      "loginPwdType": "password",
+      "registerFieldTypes": [
+        {"id": "register-email", "type": "email"},
+        {"id": "register-password", "type": "password"},
+        {"id": "", "type": "password"}
+      ],
+      "allPasswordsMasked": true,
+      "status": "passed"
+    }
+  },
+
+  "rawRunTrace": {
+    "runId": "mqta7igb",
+    "capturedAt": "2026-06-25T09:10:16.619Z",
+    "uniqueEmail": "qa.reg.1782378616620@example.com",
+    "uniquePassword": "Test1234!Aa",
+    "discrepanciesFromPolishedSpec": [
+      {
+        "field": "TC5.executionStatus",
+        "rawValue": "failed",
+        "polishedValue": "passed",
+        "resolution": "Polished spec wins. Re-verification confirmed the wrong-login error text 'Invalid email or password' is present on /login (visible via body-text scan). The raw trace's `wrongLoginErrors=[]` was an artifact of the [role=alert] / .error-message selectors not matching the actual inline error element — the error IS visible, the selector was just wrong."
+      },
+      {
+        "field": "TC3.dupErrors",
+        "rawValue": "[]",
+        "polishedValue": ["Email already registered"],
+        "resolution": "Polished spec wins. The duplicate-email error was confirmed visible in the re-run."
+      },
+      {
+        "field": "sessionStorageLocation",
+        "rawValue": "(not probed)",
+        "polishedValue": "localStorage['eventhub_token'] (JWT). NO cookies set. Logout wipes localStorage.",
+        "resolution": "Polished spec wins. The raw trace only confirmed 'session persists across reload' but did not probe the storage backend; the polished spec confirmed localStorage via direct inspection."
+      },
+      {
+        "field": "wrongLoginErrorText",
+        "rawValue": "not observed",
+        "polishedValue": "Invalid email or password",
+        "resolution": "Polished spec wins. Re-run confirmed the text via page.body() text scan."
+      }
+    ]
+  },
+
+  "observations": [
+    "No first-name / last-name fields on the registration form — only email, password, and confirm-password. The form collects no name data at all.",
+    "The confirm-password field has NO id attribute. Selectors must fall back to either placeholder (`form input[placeholder=\"Repeat your password\"]`) or position (`form input[type=\"password\"]:not(#register-password)`).",
+    "The registration form has no HTML `required` attribute (form has `novalidate=\"true\"`). Validation is JS-driven and renders inline error strings directly under the relevant field.",
+    "Observed password policy enforced by the site: minimum 8 characters, at least one uppercase letter, at least one digit, at least one symbol. The placeholder text states this exact policy.",
+    "Logout is a `<button id=\"logout-btn\" data-testid=\"logout-btn\">Logout</button>` rendered directly in the header — there is no profile menu, dropdown, or confirmation dialog.",
+    "After logout, every auth-only route I tested (e.g. /bookings) redirects to /login. This is the canonical signal that the session is truly terminated.",
+    "After a successful register the user lands on `/` (home). After a successful login the user also lands on `/`. Both routes display the authenticated user's email in the header next to the Logout button.",
+    "Wrong-password error text on /login: 'Invalid email or password'. It is rendered inline on the page but does NOT appear inside any [role=\"alert\"] or .error-message / .text-red-* element that I targeted — body-text scan was needed to find it. The BDD automation builder should match by visible text rather than by role.",
+    "Duplicate-email error text on /register: 'Email already registered'. Also inline, similar styling to the validation errors above.",
+    "Console errors observed during exploration: occasional 400 / 404 on resource fetches and 'Failed to fetch RSC payload' warnings from Next.js during client-side navigation. Non-blocking but noisy.",
+    "Password masking confirmed on both /login and /register (input type=password).",
+    "Session sanity: a hard reload of `/` after login preserves the session — the email is still in the header and localStorage['eventhub_token'] is intact. This proves the token is in localStorage (not a session-scoped cookie).",
+    "A freshly registered normal user does NOT see the 'Admin' nav link in the header — only the seeded admin user (manish123@gmail.com) sees it. This is consistent with role-based UI.",
+    "All five test cases passed when executed live on 2026-06-25."
+  ],
+
+  "uxDefects": [
+    {
+      "id": "RUX-1",
+      "severity": "low",
+      "title": "Wrong-login error is not addressable by standard ARIA/class selectors",
+      "evidence": "The 'Invalid email or password' message on /login is not inside [role=alert] / .error-message / .text-red-* — body-text scan was the only way to detect it.",
+      "automationImpact": "Cucumber step `Then I should see the error \"Invalid email or password\"` will fail with strict role-based locators. Must use page.getByText() or page.locator(':text(...)') instead.",
+      "remediationInAutomation": "Use `await expect(page.getByText('Invalid email or password')).toBeVisible()`."
+    },
+    {
+      "id": "RUX-2",
+      "severity": "low",
+      "title": "Confirm-password field has no id attribute",
+      "evidence": "Selector #confirm-password does not exist. Only the password field has an id; confirm is matched by placeholder or position.",
+      "automationImpact": "Any cucumber step using #confirm-password will time out.",
+      "remediationInAutomation": "Use the `fieldSelectors.registerConfirmPassword` value from this JSON — `form input[type=\"password\"]:not(#register-password)`."
+    },
+    {
+      "id": "RUX-3",
+      "severity": "low",
+      "title": "Registration form has novalidate and no required attributes",
+      "evidence": "All validation is JS-driven. Empty submit does not trigger browser-native validation messages.",
+      "automationImpact": "Standard Playwright form-submit-on-empty assertions will not work; must assert on the app-rendered inline error text.",
+      "remediationInAutomation": "Use page.getByText() for assertions on validation errors."
+    },
+    {
+      "id": "RUX-4",
+      "severity": "info",
+      "title": "No logout confirmation dialog",
+      "evidence": "Logout is a single-click action with no confirm step.",
+      "automationImpact": "None — automation-friendly. Just be aware that a single stray click will end the session.",
+      "remediationInAutomation": "n/a"
+    }
+  ],
+
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+
+  "coverageSummary": {
+    "pagesDiscovered": 4,
+    "pagesVisited": ["/", "/register", "/login", "/bookings"],
+    "flowsExercised": 5,
+    "testCasesPassed": 5,
+    "testCasesFailed": 0,
+    "defectsLogged": 0,
+    "areasNotTested": [
+      "Forgot-password flow — not in scope",
+      "Email verification step — site does not appear to require one",
+      "Rate-limiting / captcha on rapid re-registration attempts",
+      "Behaviour on an invalid JWT in localStorage (e.g. tampered token)",
+      "Whether the session token is also written to cookies as a fallback (none observed in this run)"
+    ]
+  }
+}

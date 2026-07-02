@@ -1,0 +1,16 @@
+{
+  "consoleErrors": [],
+  "log": [
+    "events before happy submit= 9",
+    "events after happy submit= 9",
+    "toasts= [\".text-emerald-600: 481/3000\",\".text-emerald-600: 500/500\"]",
+    "\"QA Conference 2026\" rows in table= 1",
+    "title input after submit= \"\"",
+    "city input after submit= \"\""
+  ],
+  "toasts": [
+    ".text-emerald-600: 481/3000",
+    ".text-emerald-600: 500/500"
+  ],
+  "finalUrl": "https://eventhub.rahulshettyacademy.com/admin/events"
+}

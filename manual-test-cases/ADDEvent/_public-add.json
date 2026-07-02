@@ -1,0 +1,9 @@
+{
+  "consoleErrors": [],
+  "log": [
+    "\"Add New Event\" matches on /events= 1",
+    "  [0] tag=BUTTON role=null href=null text=\"Add New Event\" class=\"\n        inline-flex items-center justify-center font-medium border\n        tran\"",
+    "url after clicking first Add New Event on /events= https://eventhub.rahulshettyacademy.com/admin/events"
+  ],
+  "finalUrl": "https://eventhub.rahulshettyacademy.com/admin/events"
+}

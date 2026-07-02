@@ -1,0 +1,2 @@
+- [EventHub Playwright architecture & JSON spec schema](eventhub-playwright-architecture.md) — Cucumber+Playwright stack, POManager/locator convention, JSON test-spec fields, running commands
+- [Add New Event feature implementation](add-event-feature-implementation.md) — choices and assumptions made when scaffolding `features/add-new-event.feature` from the JSON spec

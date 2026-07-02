@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sL https://eventhub.rahulshettyacademy.com/)",
+      "Bash(curl -sL https://eventhub.rahulshettyacademy.com/login)"
+    ]
+  }
+}

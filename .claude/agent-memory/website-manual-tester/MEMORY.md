@@ -1,0 +1,2 @@
+- [EventHub site map (selectors, routes, session model)](eventhub-site-map.md) — confirmed facts about eventhub.rahulshettyacademy.com register/login/logout flow
+- [EventHub manual-test-case output conventions](eventhub-output-conventions.md) — JSON shape + folder/naming conventions expected by the downstream bdd-automation-builder

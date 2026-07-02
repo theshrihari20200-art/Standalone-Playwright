@@ -1,0 +1,29 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --format json:reports/cucumber-report.json",
+    "test:smoke": "cucumber-js --tags @smoke --format json:reports/cucumber-report.json",
+    "test:registration": "cucumber-js features/registration.feature --format json:reports/cucumber-report.json",
+    "test:single": "cucumber-js --name",
+    "test:report": "node scripts/generate-report.js",
+    "test:full": "npm test && npm run test:report",
+    "report:open": "node -e \"require('open')('reports/cucumber-report.html')\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.0.0",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.3",
+    "fs-extra": "^11.2.0",
+    "multiple-cucumber-html-reporter": "^3.0.0",
+    "open": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.0"
+  }
+}

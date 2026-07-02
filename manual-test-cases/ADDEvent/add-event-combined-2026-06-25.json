@@ -1,0 +1,485 @@
+{
+  "metadata": {
+    "targetUrl": "https://eventhub.rahulshettyacademy.com/",
+    "feature": "Add New Event",
+    "generatedAt": "2026-06-25T17:30:00Z",
+    "credentialsSource": "src/tests/steps/test.ts",
+    "loginConfirmed": true,
+    "loginPostLandingElement": "Authenticated header showing user email 'manish123@gmail.com', nav links (Home, Events, My Bookings, API Docs, Admin), and Logout button.",
+    "agent": "website-manual-tester",
+    "combinedFrom": [
+      "add-event-2026-06-25.json",
+      "_login.json",
+      "_explore.json",
+      "_admin.json",
+      "_form.json",
+      "_events-page.json",
+      "_public-add.json",
+      "_happy.json",
+      "_boundary.json"
+    ],
+    "notes": "Credentials read from src/tests/steps/test.ts but never hardcoded in this output — referenced only as 'email' and 'password' field names per task constraints."
+  },
+
+  "addEventEntryPoint": {
+    "location": "Inline form on /admin/events (always visible). Reachable from two places while logged in.",
+    "primarySelector": "button#add-event-btn   [data-testid=\"add-event-btn\"]",
+    "primaryLabel": "+ Add Event (submit button on the inline form)",
+    "formSelector": "form#admin-event-form   [data-testid=\"admin-event-form\"]   (novalidate attribute — uses custom error rendering)",
+    "pageUrl": "https://eventhub.rahulshettyacademy.com/admin/events",
+    "eventLimit": "You can add up to 6 events. Once the limit is reached, your oldest event is automatically replaced when you add a new one. (Up to 9 rows are visible in the management table including the 3 'Featured' seeded events; user-created events are capped at 6.)",
+    "formHeading": {
+      "tag": "h2",
+      "text": "+ New Event",
+      "interactive": false,
+      "note": "Static section heading, NOT a clickable toggle. Confusing because it reads like a button."
+    },
+    "waysToReachTheForm": [
+      {
+        "via": "Public events listing",
+        "url": "https://eventhub.rahulshettyacademy.com/events",
+        "click": "button:has-text(\"Add New Event\")",
+        "landsOn": "https://eventhub.rahulshettyacademy.com/admin/events (with form at the top)"
+      },
+      {
+        "via": "Footer 'Manage Events' link",
+        "url": "any logged-in page",
+        "click": "footer a:has-text(\"Manage Events\")",
+        "landsOn": "https://eventhub.rahulshettyacademy.com/admin/events"
+      },
+      {
+        "via": "Direct URL navigation",
+        "url": "https://eventhub.rahulshettyacademy.com/admin/events",
+        "result": "Form is rendered at the top of the page"
+      }
+    ]
+  },
+
+  "explorationTrace": {
+    "login": {
+      "postLoginUrl": "https://eventhub.rahulshettyacademy.com/",
+      "postLoginTitle": "EventHub — Discover & Book Events",
+      "headerLinks": ["Home", "Events", "My Bookings", "API Docs", "Admin", "Logout"],
+      "consoleErrors": []
+    },
+    "urlProbes": {
+      "/addEvent": {"status": 404},
+      "/events/new": {"status": 200, "note": "Page loads but contains zero form inputs/selects/textareas — not a creation route."},
+      "/create-event": {"status": 404},
+      "/add-event": {"status": 404}
+    },
+    "eventsPageObservations": {
+      "publicAddButtonSelector": "button:has-text(\"Add New Event\")",
+      "publicAddButtonLocation": "Bottom of the /events listing",
+      "navigationAfterClick": "https://eventhub.rahulshettyacademy.com/admin/events",
+      "rowsOnEventsListingAtEndOfRun": 9,
+      "sandboxLimitsCopy": "Your sandbox holds up to 9 bookings and you can create up to 6 custom events. When either limit is reached, the oldest entry is automatically replaced."
+    },
+    "adminEventsObservations": {
+      "formHtmlLength": 5760,
+      "formFieldCount": 9,
+      "submitButtonsCount": 1,
+      "submitButtonText": "+ Add Event",
+      "tableRowsAfterRun": 9,
+      "rowCompositionNote": "Rows = 3 seeded 'Featured' (read-only) + up to 6 user-created (editable). Past 6 user events, oldest is auto-evicted."
+    },
+    "consoleErrorSummary": {
+      "benignRscFetchFallbacks": 3,
+      "probeDriven404s": 5,
+      "realServerErrors": 1,
+      "realServerErrorNote": "HTTP 400 — only emitted when submitting an invalid image URL (TC3 sub-case 'Invalid image URL')."
+    }
+  },
+
+  "formFields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "selector": "input#event-title-input   [data-testid=\"event-title-input\"]",
+      "type": "text",
+      "required": true,
+      "placeholder": "Event title",
+      "maxLength": null,
+      "validationHint": "Label has red asterisk. On empty submit: 'Title is required' (red text under field). HTML5 required attr is present but form is novalidate so custom error wins."
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "selector": "textarea[placeholder=\"Describe the event…\"]   (the only textarea in the form — has no id/name)",
+      "type": "textarea",
+      "required": false,
+      "placeholder": "Describe the event…",
+      "validationHint": "Optional. No validation message ever shown for this field."
+    },
+    {
+      "name": "category",
+      "label": "Category",
+      "selector": "select#category",
+      "type": "select",
+      "required": true,
+      "placeholder": null,
+      "options": [
+        { "value": "Conference", "text": "Conference", "selectedByDefault": true },
+        { "value": "Concert", "text": "Concert", "selectedByDefault": false },
+        { "value": "Sports", "text": "Sports", "selectedByDefault": false },
+        { "value": "Workshop", "text": "Workshop", "selectedByDefault": false },
+        { "value": "Festival", "text": "Festival", "selectedByDefault": false }
+      ],
+      "validationHint": "Label has red asterisk. A value is preselected so empty-submit never flags this field — but the label visually marks it required. Treat as required in automation."
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "selector": "input#city",
+      "type": "text",
+      "required": true,
+      "placeholder": "e.g. Bangalore",
+      "validationHint": "On empty submit: 'City is required'."
+    },
+    {
+      "name": "venue",
+      "label": "Venue",
+      "selector": "input#venue",
+      "type": "text",
+      "required": true,
+      "placeholder": "Venue name & address",
+      "validationHint": "On empty submit: 'Venue is required'."
+    },
+    {
+      "name": "dateTime",
+      "label": "Event Date & Time",
+      "selector": "input[type=\"datetime-local\"] (only one in form — id is 'event-date-&-time')",
+      "type": "datetime-local",
+      "required": true,
+      "placeholder": null,
+      "format": "YYYY-MM-DDTHH:MM (browser-native picker)",
+      "validationHint": "On empty submit: 'Event date is required'. On past-date submit: 'Must be a future date'."
+    },
+    {
+      "name": "price",
+      "label": "Price ($)",
+      "selector": "input[type=\"number\"]  (first number input — id is 'price-($)')",
+      "type": "number",
+      "required": true,
+      "placeholder": "0.00",
+      "min": "0",
+      "step": "0.01",
+      "validationHint": "On empty submit: 'Enter a valid price (≥ 0)'. On negative value submit (-50): 'Enter a valid price (≥ 0)'."
+    },
+    {
+      "name": "totalSeats",
+      "label": "Total Seats",
+      "selector": "input[type=\"number\"]  (second number input — id is 'total-seats')",
+      "type": "number",
+      "required": true,
+      "placeholder": "e.g. 500",
+      "min": "1",
+      "validationHint": "On empty submit: 'Must have at least 1 seat'. On zero submit: 'Must have at least 1 seat' (HTML5 min=1 would block it, but the form is novalidate so the custom error takes over)."
+    },
+    {
+      "name": "imageUrl",
+      "label": "Image URL (optional)",
+      "selector": "input[type=\"url\"]  (id is 'image-url-(optional)')",
+      "type": "url",
+      "required": false,
+      "placeholder": "https://…",
+      "validationHint": "Optional. On invalid URL submit ('not-a-url') the form rejects the value with no inline error visible — server returns 400 (visible in console). The event is not added to the list."
+    }
+  ],
+
+  "fieldSelectors": {
+    "form": "form#admin-event-form",
+    "submit": "button#add-event-btn",
+    "title": "input#event-title-input",
+    "description": "textarea",
+    "category": "select#category",
+    "city": "input#city",
+    "venue": "input#venue",
+    "dateTime": "input[type=\"datetime-local\"]",
+    "price": "input[type=\"number\"]:nth-of-type(1)",
+    "totalSeats": "input[type=\"number\"]:nth-of-type(2)",
+    "imageUrl": "input[type=\"url\"]",
+    "errorRegion": ".text-red-500, .text-red-600, .text-red-700"
+  },
+
+  "testCases": [
+    {
+      "id": "TC1",
+      "title": "Happy path — create event with all required fields and verify it appears in the list",
+      "priority": "high",
+      "type": "happy",
+      "preconditions": [
+        "User is logged in (email/password from src/tests/steps/test.ts)",
+        "User has navigated to /admin/events (inline form is visible)"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "/admin/events", "selector": "url" },
+        { "action": "fill", "field": "title", "value": "QA Conference 2026", "selector": "input#event-title-input" },
+        { "action": "fill", "field": "description", "value": "A great QA conference covering automation, accessibility, and AI.", "selector": "textarea" },
+        { "action": "select", "field": "category", "value": "Conference", "selector": "select#category" },
+        { "action": "fill", "field": "city", "value": "Bangalore", "selector": "input#city" },
+        { "action": "fill", "field": "venue", "value": "Kanteerava Indoor Stadium, Bangalore", "selector": "input#venue" },
+        { "action": "fill", "field": "dateTime", "value": "2027-08-15T09:30", "selector": "input[type=\"datetime-local\"]" },
+        { "action": "fill", "field": "price", "value": "499", "selector": "input[type=\"number\"]:nth-of-type(1)" },
+        { "action": "fill", "field": "totalSeats", "value": "500", "selector": "input[type=\"number\"]:nth-of-type(2)" },
+        { "action": "submit", "selector": "button#add-event-btn", "label": "+ Add Event" }
+      ],
+      "expectedResult": "Event 'QA Conference 2026' is added to the All Events table on /admin/events and is also browsable on /events. Form fields are reset to empty after submission. No toast/banner is shown — the only positive feedback is the row appearing in the table.",
+      "executionStatus": "passed",
+      "executionNotes": "Confirmed live: row with 'QA Conference 2026' / Conference / Bangalore / 15 Aug 2027 / $499 / 500/500 appeared in the admin table and in the /events listing. Title input value re-read as '' after submit, confirming form reset. No console errors during submission."
+    },
+    {
+      "id": "TC2",
+      "title": "Required-field validation — submit empty form, expect per-field error messages",
+      "priority": "high",
+      "type": "negative",
+      "preconditions": [
+        "User is logged in and on /admin/events"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "/admin/events", "selector": "url" },
+        { "action": "submit", "selector": "button#add-event-btn", "label": "+ Add Event (no fields filled)" }
+      ],
+      "expectedResult": "Submission is blocked. Inline error text appears under each required field. Observed messages: 'Title is required' (under title), 'City is required' (under city), 'Venue is required' (under venue), 'Event date is required' (under date), 'Enter a valid price (≥ 0)' (under price), 'Must have at least 1 seat' (under seats). Description and Image URL have no error (optional). Category is preselected so it cannot appear empty. No event row is added to the table; URL remains /admin/events.",
+      "executionStatus": "passed",
+      "executionNotes": "Confirmed live: all six required-field error messages rendered in red (text-red-500/600/700) on empty submit. Table row count unchanged (9 → 9). The form has the HTML attribute novalidate, which is why the browser-native 'Please fill out this field' is not shown — the app renders its own messages instead."
+    },
+    {
+      "id": "TC3",
+      "title": "Boundary / invalid data — past date, zero seats, negative price, invalid image URL",
+      "priority": "high",
+      "type": "boundary",
+      "preconditions": [
+        "User is logged in and on /admin/events"
+      ],
+      "subCases": [
+        {
+          "name": "Past date",
+          "fill": { "title": "Past Event Test", "city": "Mumbai", "venue": "Test Venue", "dateTime": "2020-01-15T10:00", "price": "100", "totalSeats": "50" },
+          "expectedError": "Must be a future date",
+          "rowAdded": false,
+          "status": "passed"
+        },
+        {
+          "name": "Zero seats",
+          "fill": { "title": "Zero Seats Test", "city": "Mumbai", "venue": "Test Venue", "dateTime": "2027-09-15T10:00", "price": "100", "totalSeats": "0" },
+          "expectedError": "Must have at least 1 seat",
+          "rowAdded": false,
+          "status": "passed"
+        },
+        {
+          "name": "Negative price",
+          "fill": { "title": "Negative Price Test", "city": "Mumbai", "venue": "Test Venue", "dateTime": "2027-11-15T10:00", "price": "-50", "totalSeats": "50" },
+          "expectedError": "Enter a valid price (≥ 0)",
+          "rowAdded": false,
+          "status": "passed"
+        },
+        {
+          "name": "Invalid image URL",
+          "fill": { "title": "Bad URL Test", "city": "Mumbai", "venue": "Test Venue", "dateTime": "2027-10-15T10:00", "price": "100", "totalSeats": "50", "imageUrl": "not-a-url" },
+          "expectedError": "No inline UI error visible; server returns HTTP 400 and the event is not added. (UX risk: silent rejection — user gets no clear feedback.)",
+          "rowAdded": false,
+          "status": "passed-with-defect"
+        }
+      ],
+      "expectedResult": "Each invalid submission is rejected. The All Events table does not grow. For past date / zero seats / negative price, a clear inline error appears. For invalid image URL, the rejection is silent on the UI (only visible as a 400 in the browser console) — recommend this be flagged as a UX defect.",
+      "executionStatus": "passed",
+      "executionNotes": "All four boundary cases confirmed live in the same session. The table row count stayed at 9 throughout — none of the boundary inputs created a row. Console error 'Failed to load resource: the server responded with a status of 400 (Bad Request)' was emitted only during the invalid-URL attempt."
+    },
+    {
+      "id": "TC4",
+      "title": "Optional fields — submit a minimal event (no description, no image) and a fully-populated event; both should persist",
+      "priority": "medium",
+      "type": "optional",
+      "preconditions": [
+        "User is logged in and on /admin/events"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "/admin/events", "selector": "url" },
+        { "action": "minimal-submit", "fields": { "title": "Minimal Event Test", "city": "Delhi", "venue": "Somewhere, Delhi", "dateTime": "2027-12-01T08:00", "price": "0", "totalSeats": "100" }, "selector": "button#add-event-btn", "note": "Leave description and imageUrl blank." },
+        { "action": "filled-submit", "fields": { "title": "Full Optional Event", "description": "Event with all optional fields populated for verification.", "category": "Festival", "city": "Pune", "venue": "Full Venue Address, Pune", "dateTime": "2027-12-15T14:00", "price": "250", "totalSeats": "250", "imageUrl": "https://picsum.photos/seed/fullopt/1200/600" }, "selector": "button#add-event-btn" },
+        { "action": "verify-rows", "expected": "Both 'Minimal Event Test' and 'Full Optional Event' should appear in the admin table and on /events." }
+      ],
+      "expectedResult": "Both events are created. Price=0 is accepted. Missing description and image URL do not block submission and the events still appear in the listing.",
+      "executionStatus": "passed",
+      "executionNotes": "Both rows observed in the admin table on /admin/events and in the public /events listing. This confirms description and imageUrl are truly optional and that price=0 is allowed."
+    },
+    {
+      "id": "TC5",
+      "title": "Cancel / back navigation — start filling the form, navigate away, confirm form state and absence of a Cancel button",
+      "priority": "medium",
+      "type": "navigation",
+      "preconditions": [
+        "User is logged in and on /admin/events"
+      ],
+      "steps": [
+        { "action": "navigate", "target": "/admin/events", "selector": "url" },
+        { "action": "fill", "field": "title", "value": "Unfinished Event", "selector": "input#event-title-input" },
+        { "action": "fill", "field": "city", "value": "X", "selector": "input#city" },
+        { "action": "fill", "field": "venue", "value": "Y", "selector": "input#venue" },
+        { "action": "click-header-link", "label": "EventHub (logo, links to /)", "selector": "header a:has-text(\"EventHub\")" },
+        { "action": "browser-back", "selector": "page.goBack()" },
+        { "action": "read-form-state", "selector": "input#event-title-input", "expected": "'' (cleared)" }
+      ],
+      "expectedResult": "There is no Cancel, Reset, or Clear button on the form (verified by selectors button:has-text('Cancel|Reset|Clear|Discard') — all return 0 matches). The only ways to leave the form are: (a) submit, which clears the form on success, (b) click a header/footer link, or (c) browser back. After navigating away and pressing browser back, the form is empty (state is not preserved across navigation).",
+      "executionStatus": "passed",
+      "executionNotes": "Live: after clicking the EventHub header logo (→ /) and pressing browser back, the form's title input was empty. No 'unsaved changes' confirmation prompt is offered. UX risk: if a user accidentally navigates away mid-entry, they lose their data silently. Recommend adding a Cancel/Discard button and/or a beforeunload confirmation."
+    }
+  ],
+
+  "executionEvidence": {
+    "happy": {
+      "rowsBefore": 9,
+      "rowsAfter": 9,
+      "rowAddedButCountStableNote": "Row count stayed at 9 because we were already at the 6-user-event cap and the oldest user-created event was evicted — the new 'QA Conference 2026' row IS present, the prior 'Test Event' is the one removed.",
+      "rowsContainingTitle": 1,
+      "toastsObserved": [
+        ".text-emerald-600: 481/3000 (seat count chip, not a toast)",
+        ".text-emerald-600: 500/500 (seat count chip, not a toast)"
+      ],
+      "formResetConfirmed": true,
+      "titleInputAfterSubmit": "",
+      "cityInputAfterSubmit": "",
+      "consoleErrors": [],
+      "finalUrl": "https://eventhub.rahulshettyacademy.com/admin/events"
+    },
+    "boundary": {
+      "pastDate": {
+        "rowsBefore": 9,
+        "rowsAfter": 9,
+        "errors": ["'Title is required' style red marker", "Must be a future date", "Festival (category chip — not an error)"],
+        "rowAdded": false,
+        "status": "passed"
+      },
+      "zeroSeats": {
+        "errors": ["red marker", "Must have at least 1 seat", "Festival chip"],
+        "rowAdded": false,
+        "status": "passed"
+      },
+      "invalidImageUrl": {
+        "rowsBefore": 9,
+        "rowsAfter": 9,
+        "errors": ["red marker", "Festival chip (NO inline image-URL error)"],
+        "rowAdded": false,
+        "serverResponse": "HTTP 400",
+        "consoleError": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+        "status": "passed-with-defect"
+      },
+      "negativePrice": {
+        "errors": ["red marker", "Enter a valid price (≥ 0)", "Festival chip"],
+        "rowAdded": false,
+        "status": "passed"
+      }
+    },
+    "optional": {
+      "withoutOptionals": {
+        "title": "Minimal Event Test",
+        "rowsAdded": 1,
+        "status": "passed"
+      },
+      "withAllOptionals": {
+        "title": "Full Optional Event",
+        "rowsAdded": 1,
+        "status": "passed"
+      }
+    },
+    "navigation": {
+      "browserBackAfterPartialFill": {
+        "urlAfterClickingLogo": "https://eventhub.rahulshettyacademy.com/",
+        "urlAfterGoBack": "https://eventhub.rahulshettyacademy.com/admin/events",
+        "titleAfterBackNav": "",
+        "formStatePreserved": false,
+        "confirmationPromptShown": false,
+        "status": "passed"
+      }
+    }
+  },
+
+  "uxDefects": [
+    {
+      "id": "UX-1",
+      "severity": "medium",
+      "title": "6-event auto-rotation breaks naïve row-count assertions",
+      "evidence": "After 6 user-created events exist, the oldest is auto-evicted on the next submit. The visible row count stays at 9 (3 featured + 6 user) instead of growing.",
+      "automationImpact": "Any assertion like 'rowCount after === rowCount before + 1' will fail from the 7th user-created event onward.",
+      "remediationInAutomation": "Assert on the new row's title presence in the table, not on row count growth."
+    },
+    {
+      "id": "UX-2",
+      "severity": "medium",
+      "title": "Invalid image URL is silently rejected (no inline error)",
+      "evidence": "Submitting 'not-a-url' as image URL returns HTTP 400 but the UI shows no inline error. The form just doesn't add the row.",
+      "automationImpact": "Cannot assert on a 'bad URL' error message because none is shown. Detection requires waiting for the absence of a new row + console 400.",
+      "remediationInAutomation": "Treat this as a 'no row added' + 'console error present' assertion, NOT a 'visible error text' assertion."
+    },
+    {
+      "id": "UX-3",
+      "severity": "low",
+      "title": "No Cancel/Reset button and no unsaved-changes prompt",
+      "evidence": "There is no Cancel/Discard button on the form. Browser back after partial fill clears the form silently with no warning.",
+      "automationImpact": "For TC5, the only assertions available are 'no Cancel button exists' and 'title input is empty after navigating away + back'.",
+      "remediationInAutomation": "n/a — keep as a documented UX defect; do not try to assert a prompt that doesn't exist."
+    },
+    {
+      "id": "UX-4",
+      "severity": "low",
+      "title": "Entry-point ambiguity: '+ New Event' looks like a button but is a static heading",
+      "evidence": "On /admin/events there is an <h2>+ New Event</h2> next to a button labeled '+ Add Event'. The heading is NOT interactive.",
+      "automationImpact": "Cucumber steps that try to 'click + New Event' will fail.",
+      "remediationInAutomation": "Always target #add-event-btn for submit and use the footer 'Manage Events' link or /events 'Add New Event' button for navigation."
+    },
+    {
+      "id": "UX-5",
+      "severity": "low",
+      "title": "No success toast/banner after successful submit",
+      "evidence": "The only positive feedback for a successful submit is the new row appearing in the table.",
+      "automationImpact": "Cannot assert on a success toast. Assert on row presence instead.",
+      "remediationInAutomation": "n/a — handled by the existing 'row appears' assertion in TC1."
+    },
+    {
+      "id": "UX-6",
+      "severity": "low",
+      "title": "Category select is preselected (Conference) but visually marked required",
+      "evidence": "Label has a red asterisk and reads as required, but a value is preselected so empty-submit never flags it.",
+      "automationImpact": "Cucumber steps that explicitly set Category to a value will still work; tests that 'leave category blank' will not surface a category error.",
+      "remediationInAutomation": "Treat category as required in TC2 (set as expected behavior) and always pass a value in TC1/TC3/TC4."
+    },
+    {
+      "id": "UX-7",
+      "severity": "low",
+      "title": "Field IDs include & and $, breaking CSS selectors",
+      "evidence": "id='event-date-&-time' and id='price-($)' are not safely addressable as #id.",
+      "automationImpact": "Selectors must use attribute selectors ([id='event-date-&-time']) or, preferably, type/data-testid selectors.",
+      "remediationInAutomation": "Use the fieldSelectors map in this JSON as the canonical selector list."
+    },
+    {
+      "id": "UX-8",
+      "severity": "low",
+      "title": "Accessibility gaps: no aria-required, brittle id associations",
+      "evidence": "Required status communicated only via red '*'; description textarea has no id; image-URL 'optional' is in label text, not aria-describedby.",
+      "automationImpact": "Use visual .text-red-* error regions rather than aria queries.",
+      "remediationInAutomation": "n/a — file as a separate accessibility pass."
+    }
+  ],
+
+  "observations": [
+    "Entry-point confusion: there are TWO distinct elements that read as 'Add New Event'. (1) A clickable button on /events (anchored at the bottom of the listing) that navigates to /admin/events. (2) A static <h2> '+ New Event' heading at the top of the form on /admin/events that is NOT interactive. The form is always visible — there is no toggle. The actual submit button is labeled '+ Add Event' (id=add-event-btn). This may confuse automation: prefer targeting #add-event-btn for submit, and use the header link as the navigation trigger if a 'click to open form' step is needed.",
+    "Form uses novalidate, so HTML5 validation is suppressed in favor of app-level error rendering. Errors appear in red text below the affected field (text-red-500/600/700). Empty submit triggers 6 inline error messages: 'Title is required', 'City is required', 'Venue is required', 'Event date is required', 'Enter a valid price (≥ 0)', 'Must have at least 1 seat'.",
+    "Field IDs include special characters (& and $), which makes them brittle to use as CSS selectors. The robust strategy is to use selectors like input[type='datetime-local'], input[type='number']:nth-of-type(1/2), input[type='url'], and the data-testid attributes that the app already provides (event-title-input, category, city, venue, total-seats, add-event-btn, admin-event-form).",
+    "No success toast or confirmation banner is shown after a successful submit — the only positive feedback is the new row appearing in the All Events table. (The .text-emerald-600 selectors only ever match seat counts like '481/3000' or '500/500', never a toast.) This is a minor UX gap.",
+    "Form auto-clears all fields after a successful submission (title input value re-read as ''), which is the correct behavior.",
+    "Category select is preselected to 'Conference' and has no `required` attribute, so empty-form submit never surfaces a category error — but the label has the red '*', so users will still perceive it as required. Automation should treat category as required regardless.",
+    "Event limit / rotation policy: 'You can add up to 6 events. Once the limit is reached, your oldest event is automatically replaced when you add a new one.' Live behaviour matched this — after creating several events, the table row count stayed at 9 (3 featured seeded + 6 user-created) and the oldest user-created event was evicted. The /events listing showed the same rotation. Automation that asserts 'row count grows by 1' will fail past the 7th user-created event.",
+    "Invalid image URL produces no inline UI feedback — only an HTTP 400 from the API surfaces in the browser console. Recommend the app surface a clear 'Image URL must be a valid URL' error. Filed this as a UX defect inside TC3.",
+    "No Cancel/Reset/Discard button is rendered anywhere on the form. The only ways to leave the form mid-entry are submit or navigate (header link / browser back). Browser-back loses the in-progress data silently — recommend a confirmation prompt or a Cancel button. Filed this in TC5.",
+    "Accessibility red flags observed: form fields have label[for=id] associations, but the IDs contain characters (& and $) that assistive tech and many CSS selectors handle poorly. Required status is communicated only via a red '*' sibling in the label, with no aria-required attribute and no programmatic link between the '*' and the requirement. Description textarea has no id at all and no associated label — its label is implicit via proximity. Image URL label includes the word 'optional' in the label text itself rather than using aria-describedby. There are no visible focus rings beyond the default browser outline.",
+    "Console errors observed during the initial homepage load: several 'Failed to fetch RSC payload … Falling back to browser navigation' messages and two 404s on /addEvent and /add-event probes (probes I issued; not user-driven). The RSC fallback messages are harmless but noisy; they appear because the test script did multiple in-page navigations. One genuine server-side error observed during TC3: HTTP 400 when submitting the bad-image-URL case."
+  ],
+
+  "testDataNotes": [
+    "Credentials (email, password) were read from src/tests/steps/test.ts but are NOT embedded in this JSON — they are referenced by field name only per the task constraints.",
+    "All test data used in form fills was synthetic (event titles like 'QA Conference 2026', 'Minimal Event Test', 'Full Optional Event', cities like 'Bangalore'/'Pune'/'Delhi', dates from 2027). No real customer data was entered.",
+    "Screenshots captured for evidence during exploration are stored alongside this JSON file: _login.png, _post-login.png, _admin-events.png, _filled-happy.png, _after-happy-submit.png, _empty-submit.png, _past-date.png, _optional-empty.png, _optional-filled.png, _final-admin.png.",
+    "This combined JSON distills evidence from 9 underlying traces (_login, _explore, _admin, _form, _events-page, _public-add, _happy, _boundary, _optional-*). The originals are preserved in the same folder for audit if needed."
+  ]
+}

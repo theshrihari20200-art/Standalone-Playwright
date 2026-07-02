@@ -1,0 +1,30 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "log": [
+    "---- BOUNDARY: past date ----",
+    "rows before/after past-date submit= 9 / 9",
+    "errors after past-date submit= [\".text-red-500: *\",\".text-red-600: Must be a future date\",\".text-red-700: Festival\"]",
+    "Past Event Test rows= 0",
+    "---- BOUNDARY: zero seats ----",
+    "errors after zero-seats submit= [\".text-red-500: *\",\".text-red-600: Must have at least 1 seat\",\".text-red-700: Festival\"]",
+    "Zero Seats Test rows= 0",
+    "---- BOUNDARY: invalid image URL ----",
+    "rows before/after bad-URL submit= 9 / 9",
+    "errors after bad-URL submit= [\".text-red-500: *\",\".text-red-700: Festival\"]",
+    "Bad URL Test rows= 0",
+    "---- BOUNDARY: negative price ----",
+    "errors after negative-price submit= [\".text-red-500: *\",\".text-red-600: Enter a valid price (≥ 0)\",\".text-red-700: Festival\"]",
+    "Negative Price Test rows= 0",
+    "---- OPTIONAL: without optional fields ----",
+    "Minimal Event Test rows (no optionals)= 1",
+    "---- OPTIONAL: with all optionals ----",
+    "Full Optional Event rows= 1",
+    "---- NAVIGATION: browser back after partial fill ----",
+    "url after clicking EventHub logo= https://eventhub.rahulshettyacademy.com/",
+    "url after goBack= https://eventhub.rahulshettyacademy.com/admin/events",
+    "title after back-nav= \"\""
+  ],
+  "finalUrl": "https://eventhub.rahulshettyacademy.com/admin/events"
+}
