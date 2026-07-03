@@ -5,38 +5,53 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   test:
+    name: Run Playwright + Cucumber Tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v5
+      # Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
+      # Install Node.js (Latest LTS)
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
         with:
           node-version: lts/*
+          cache: npm
 
-      - name: Install dependencies
+      # Install project dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      # Install Playwright browser and Linux dependencies
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run Cucumber tests
+      # Run the Cucumber test suite
+      - name: Run Cucumber Tests
         env:
           CI: "true"
         run: npm test
 
-      - name: Generate HTML report
+      # Generate HTML report even if tests fail
+      - name: Generate HTML Report
         if: always()
         run: npm run test:report
 
-      - name: Upload Reports
+      # Upload all reports as workflow artifacts
+      - name: Upload Test Reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
-          name: cucumber-report
-          path: reports/
+          name: cucumber-reports
+          path: |
+            reports/
+            playwright-report/
+          if-no-files-found: warn
           retention-days: 30
